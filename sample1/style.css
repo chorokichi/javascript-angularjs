@@ -1,0 +1,14 @@
+.daki-sample{
+    padding-bottom:70px;
+    /*border: thick groove #ff00ff;*/
+}
+
+body{
+    padding-left: 40px;
+    /*border: thick groove #ff00ff;*/
+}
+
+.daki-li{
+    font-size: 30px;
+    padding-bottom:5px;
+}

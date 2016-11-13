@@ -1,0 +1,167 @@
+<!DOCUTYPE html>
+<html lang="ja" ng-app="myApp">
+<head>
+    <meta charset="utf-8">
+    <title>Angular Sample</title>
+    <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/foundation/5.2.2/css/foundation.css">
+    <link rel="stylesheet" href="style.css">
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.0-beta.6/angular.js"></script>
+</head>
+
+<body ng-cloak>
+
+    <h1>Angularの勉強用ページ</h1>
+    
+    <ol type="1">
+    <li class="daki-li">javascriptを利用しないバイディングの確認</li>
+    <div class="daki-sample" id="daki-sample1">
+        <p1>{{hello1}}</p1>
+        <input placeholder="ここに入力された文字が上に現れる" type="text" ng-model="hello1"/>
+
+        <div>
+            <input placeholder="panelなどのクラス名入力すると下の文字が装飾される" type="text" ng-model="hello2">
+            <div class="{{hello2}}">装飾される文字</div>
+        </div>
+    </div>
+
+    <li class="daki-li">各Controllerで別処理ができることの確認</li>
+    <div class="daki-sample" id="daki-sample2">
+        <ol type="i">
+            <li>FirstCtrl</li>
+            <div ng-controller="FirstCtrl">
+                <div class="{{data.message}}">強制的にmain.jsのFirstCrtl関数でpanelに装飾されるテキスト</div>
+            </div>
+
+            <li>SecondCtrl</li>
+            <div ng-controller="SecondCtrl">
+                <div class="{{data.message}}">強制的にmain.jsのSecondCrtl関数でalert-boxに装飾されるテキスト</div>
+            </div>
+        </ol>
+    </div>
+
+    <li class="daki-li">ng-appを定義して、一つのデータを複数のコントローラーで共有する確認</li>
+    <div class="daki-sample" id="daki-sample3">
+        <ol type="i">
+            <li>SharedCtrl1</li>
+            <div data-ng-controller="SharedCtrl1">
+                <input type="text" ng-model="data.message">
+                <div>{{data.message}}</div>     
+            </div>
+
+            <li>SharedCtrl2</li>
+            <div data-ng-controller="SharedCtrl2">
+                <input type="text" ng-model="data.message">
+                <div>{{data.message}}</div>   
+            </div>
+        </ol>
+    </div>
+
+    <li class="daki-li">コントローラー内で定義した関数をHTML内で呼び出して利用できることの確認</li>
+    <div class="daki-sample" id="daki-sample4">
+        <div class="panel">
+            <p>
+                ここでは、コントローラー内で関数を定義してテキストフィールドの文字列を反転させる処理をさせているが、
+                <br>
+                本来はモデルのデーターに何らかの定型処理を実行する場合、フィルターを使う方がよい。
+            </p>
+        </div>
+        <div data-ng-controller="CustomFunctionCtrl">
+            <input type="text" ng-model="data.message">
+            <div>{{customFunction(data.message)}}</div>
+        </div>
+    </div>
+
+    <li class="daki-li">フィルターを使えることの確認</li>
+    <div class="daki-sample" id="daki-sample5">
+        <div data-ng-controller="FilterCtrl">
+            <input type="text" ng-model="data.message">
+            <!--Angularの"双方向"バインディングのため、inputがUIでの変更が即座にモデルに反映される-->
+            <div>{{data.message|reverseForSample5}}</div>
+        </div>
+    </div>
+
+    <li class="daki-li">ngRpeatの検証</li>
+    <div class="daki-sample" id="daki-sample6">
+        <div data-ng-controller="NgRepeatTestCtrl">
+            <ol type="i">
+                <li>ng-repeatを利用しない方法</li>
+                <div>usersListの第1要素: {{usersList[0]}}</div>
+                <div>usersListの第2要素(名前のみ): {{usersList[1].name}}</div>
+                <div>usersListの第3要素(名前のみ、小文字): {{usersList[2].name | lowercase}}</div>
+                <div>usersListの第4要素: {{usersList[3]}}</div>
+                <div>usersListの第100要素: {{usersList[99]}}</div>
+                
+                <li>ng-repeatを利用する方法</li>
+                <table>
+                    <tr ng-repeat="user in usersList">
+                        <td>{{user.name}}</td>
+                        <td>{{user.age}}</td>
+                    </tr>
+                </table>
+            </ol>
+        </div>
+    </div>
+
+    <li class="daki-li">ngRepeat❌filterの検証（標準filterを利用）</li>
+    <div class="daki-sample" id="daki-sample7">
+        <div class="panel">
+        <a href="https://docs.angularjs.org/api/ng/filter" target="_blank">標準filterまとめ</a>
+        </div>
+        <div data-ng-controller="NgRepeatAndFilterTestCtrl">
+            <ol type="i">
+                <li>検索項目は全要素が対象</li>
+                <input type="text" placeholder="検索する文字列を入力..." ng-model="searchTextForSample7">
+                <table>
+                    <tr ng-repeat="user in usersList | filter:searchTextForSample7">
+                        <td>{{user.name}}</td>
+                        <td>{{user.age}}</td>
+                    </tr>
+                </table>
+
+                <li>検索項目は名前のみ対象</li>
+                <input type="text" placeholder="検索する文字列を入力..." ng-model="searchTextForSample7_02.name">
+                <table>
+                    <tr ng-repeat="user in usersList | filter:searchTextForSample7_02">
+                        <td>{{user.name}}</td>
+                        <td>{{user.age}}</td>
+                    </tr>
+                </table>
+                <li>年齢で並び替え（昇順）</li>
+                <table>
+                    <tr ng-repeat="user in usersList | orderBy: 'age'">
+                        <td>{{user.name}}</td>
+                        <td>{{user.age}}</td>
+                    </tr>
+                </table>
+
+                <li>年齢で並び替え（降順）</li>
+                <table>
+                    <tr ng-repeat="user in usersList | orderBy: '-age'">
+                        <td>{{user.name}}</td>
+                        <td>{{user.age}}</td>
+                    </tr>
+                </table>
+
+                <li>年齢で並び替えて上位2件まで（昇順）</li>
+                <table>
+                    <tr ng-repeat="user in usersList | orderBy: '-age' | limitTo: 2">
+                        <td>{{user.name}}</td>
+                        <td>{{user.age}}</td>
+                    </tr>
+                </table>
+
+            </ol>
+        </div>
+    </div>
+
+
+
+
+
+
+
+    </ol>
+</body>
+<script type="text/javascript" src="main.js"></script>
+
+</html>
